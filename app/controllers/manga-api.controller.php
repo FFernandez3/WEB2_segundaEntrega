@@ -35,7 +35,7 @@ class MangaApiController
             foreach ($input as $key => $value) {
                 if ($key != 'page' && $key != 'sort' && $key != 'search' && $key != 'resource') {
                     //var_dump($key);
-                    $this->view->response("Se ingresaron parametros incorrectos, ingrese Sort, Page, Search o cualquier combinacion posible", 400);
+                    $this->view->response("Se ingresaron parametros incorrectos, ingrese sort, page, search o cualquier combinacion posible", 400);
                     die();
                 }
             }
@@ -235,15 +235,24 @@ class MangaApiController
 
     function getManga($params = null)
     {
-        // obtengo el id del arreglo de params
-        $id = $params[':ID'];
-        $manga = $this->model->get($id);
+        if($params!=null)  {
+            $id = $params[':ID'];
+            if(is_numeric($id)&&$id>0){
+                $manga = $this->model->get($id);
 
-        // si no existe devuelvo 404
-        if ($manga)
-            $this->view->response($manga);
-        else
-            $this->view->response("El manga con el id=$id no existe", 404);
+                // si no existe devuelvo 404
+                if ($manga)
+                    $this->view->response($manga);
+                else
+                    $this->view->response("El manga con el id=$id no existe", 404);
+            }
+            else{
+                $this->view->response("El id ingresado es incorrecto, debe ser un numero mayor a 0", 400);
+            }
+           
+
+        }      
+       
     }
 
     public function deleteManga($params = null)
@@ -289,10 +298,10 @@ class MangaApiController
         
         $body = $this->getData(); //el body con lo q quiero cambiar
         
-        //hacer validaciones
+        
         if($params!=null){
             $id = $params[':ID'];
-            //var_dump($id);
+            
             if (is_numeric($id) && $id >= 0) {
                 $manga = $this->model->get($id);
     
@@ -322,5 +331,10 @@ class MangaApiController
     {
         $this->view->response("El parametro es erroneo o esta vacio", 400);
         die();
+    }
+    public function pageNotFound() {
+        $this->view->response("Page not found", 404);
+        die();
+
     }
 }

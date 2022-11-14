@@ -80,7 +80,7 @@ Esta funcionalidad permite ordenar los recursos según cualquier campo de la tab
 - Key errónea  
 **Method:** GET  
 **Url:** api/mangas?sor=titulo  
-**Response:** 404  
+**Response:** 400  
 **Mensaje de error:** Se ingresaron parametros incorrectos, ingrese Sort, Page, Search o cualquier combinacion posible.  
 - Value vacio  
 **Method:** GET  

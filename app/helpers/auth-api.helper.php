@@ -1,7 +1,7 @@
 <?php
 
 class AuthApiHelper {
-    function getToken(){
+    function getToken(){ 
         $auth = $this->getAuthHeader(); // Bearer header.payload.signature
         $auth = explode(" ", $auth);
         if($auth[0]!="Bearer" || count($auth) != 2){
@@ -12,12 +12,13 @@ class AuthApiHelper {
         $payload = $token[1];
         $signature = $token[2];
 
-        $new_signature = hash_hmac('SHA256', "$header.$payload", "Clave1234", true);
+        //firmo otra vez y veo que coincidan 
+        $new_signature = hash_hmac('SHA256', "$header.$payload", "ClaveSecreta1234", true);
         $new_signature = base64url_encode($new_signature);
         if($signature!=$new_signature)
             return array();
 
-        $payload = json_decode(base64_decode($payload));
+        $payload = json_decode(base64_decode($payload)); //decodifico el payload, me queda un obj php
         if(!isset($payload->exp) || $payload->exp<time())
             return array();
         
@@ -34,10 +35,14 @@ class AuthApiHelper {
 
     function getAuthHeader(){
         $header = "";
-        if(isset($_SERVER['HTTP_AUTHORIZATION']))
-            $header = $_SERVER['HTTP_AUTHORIZATION'];
-        if(isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION']))
-            $header = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
-        return $header;
+        if(isset($_SERVER['HTTP_AUTHORIZATION'])){//para nginx u otros
+            $header= $_SERVER['HTTP_AUTHORIZATION'];
+            return $header;
+        }
+        if(isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])){ //esto lo pongo por apache, es el header q le puse en el htaccess
+            $header= $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+            return $header;
+        }
+        return null;
     }
 }

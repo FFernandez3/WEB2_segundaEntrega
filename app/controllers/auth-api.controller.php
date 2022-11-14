@@ -1,8 +1,10 @@
 <?php
 require_once './app/models/manga.model.php';
+//require_once  './app/models/usuario.model.php';
 require_once './app/views/api.view.php';
 require_once './app/helpers/auth-api.helper.php';
 
+//nuestra propia base64 para salvar el =del final que pone base64
 function base64url_encode($data) {
     return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
 }
@@ -16,7 +18,7 @@ class AuthApiController {
     private $data;
 
     public function __construct() {
-        //$this->model = new TaskModel();
+       // $this->model = new UsuarioModel();
         $this->view = new ApiView();
         $this->authHelper = new AuthApiHelper();
         
@@ -48,8 +50,10 @@ class AuthApiController {
         $user = $userpass[0];
         $pass = $userpass[1];
 
+        //$userDB= $this->model->getUser();
+
         //esto lo deberia obtener de la tabla usuarios no hardcodeado!!!
-        if($user == "Admin" && $pass == "web"){
+        if($user == "admin" && $pass == "web"){
             //  crear un token
             $header = array(
                 'alg' => 'HS256',
@@ -60,12 +64,13 @@ class AuthApiController {
                 'name' => "Admin",
                 'exp' => time()+3600
             );
+            //los paso a json y despues a base64
             $header = base64url_encode(json_encode($header));
             $payload = base64url_encode(json_encode($payload));
-            $signature = hash_hmac('SHA256', "$header.$payload", "Clave1234", true);
+            $signature = hash_hmac('SHA256', "$header.$payload", "ClaveSecreta1234", true);
             $signature = base64url_encode($signature);
             $token = "$header.$payload.$signature";
-             $this->view->response($token);
+             $this->view->response($token); //si el user y la contraseña estan bien devuelve el token
         }else{
             $this->view->response('No autorizado', 401);
         }
