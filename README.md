@@ -1,6 +1,6 @@
 # API REST –RECURSO DE MANGAS
 ## Importar base de datos
-Importar desde phpMyAdmin u otro database/db_manga.sql
+Importar desde phpMyAdmin u otro database/db_mangas.sql
 ## Prueba con Postman o similar
 El endpoint de la API es: http://localhost/tpe_2daEntrega_version3/api/mangas 
 ## Obtener todos los mangas
@@ -16,12 +16,12 @@ El endpoint de la API es: http://localhost/tpe_2daEntrega_version3/api/mangas
 **URL:** api/mangas  
 **Body:**  
 `{  
-        "titulo": "Spy family 4",  
-        "autor": "Tatsuya Endo",  
-        "sinopsis": "Los países de Westalis y Ostania libran desde hace años una guerra fría donde el espionaje y los asesinatos son moneda corriente. El espía conocido como “Twilight” es el mejor agente de Westalis que tiene por objetivo encargarse del poderoso Donovan.",  
+        "titulo": "HAIKYU!! 2",  
+        "autor": "Haruichi Furudate",  
+        "sinopsis": "Shoyo Hinata es un estudiante que se fanatiza con el vóley después de ver un partido en el que la rompía un jugador petiso como él. Esto lo inspira a seguir sus pasos y convertirse en un as aunque tenga que arrancar bien de abajo.",  
         "editorial": "Ivrea",  
         "portada": null,  
-        "id_genero_fk": 1  
+        "id_genero_fk": 20  
     }`   
 **Response:** 201
 ## Editar un manga
