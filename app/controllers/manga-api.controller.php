@@ -87,6 +87,7 @@ class MangaApiController
             $this->view->response("Error del servidor", 500);
         }
     }
+   
     //Busca ordenado acendente
     function getAllMangas()
     {
