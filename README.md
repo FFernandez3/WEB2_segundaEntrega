@@ -1,4 +1,4 @@
-# API REST –RECURSO DE MANGAS
+# API REST – RECURSO DE MANGAS
 ## Importar base de datos
 Importar desde phpMyAdmin u otro database/db_mangas.sql
 ## Prueba con Postman o similar
@@ -23,7 +23,7 @@ Para poder insertar, modificar o eliminar mangas es necesario loggearse correcta
 **URL:** api/mangas  
 **Body:**  
 `{  
-        "titulo": "HAIKYU!! 2",  
+        "titulo": "HAIKYU!! 3",  
         "autor": "Haruichi Furudate",  
         "sinopsis": "Shoyo Hinata es un estudiante que se fanatiza con el vóley después de ver un partido en el que la rompía un jugador petiso como él. Esto lo inspira a seguir sus pasos y convertirse en un as aunque tenga que arrancar bien de abajo.",  
         "editorial": "Ivrea",  

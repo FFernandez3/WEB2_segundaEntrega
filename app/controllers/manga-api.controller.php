@@ -289,6 +289,7 @@ class MangaApiController
             }
             else if(!in_array($manga->id_genero_fk, $generos)){
                 $this->view->response("El id del genero ingresado es incorrecto agregue $generos[0] o $generos[1]", 404);
+                die();
             }
             else {
                 $id = $this->model->insert($manga->titulo, $manga->autor, $manga->sinopsis, $manga->editorial, $manga->portada, $manga->id_genero_fk);
@@ -311,11 +312,14 @@ class MangaApiController
     {
         if($this->helper->isLoggedIn()){
             $body = $this->getData(); //el body con lo q quiero cambiar
-        
+            $generos=array(1, 20);
             //var_dump("entro al edit");
             if($params!=null){
                 $id = $params[':ID'];
-                
+                if(!in_array($body->id_genero_fk, $generos)){
+                    $this->view->response("El id del genero ingresado es incorrecto agregue $generos[0] o $generos[1]", 404);
+                    die();
+                }
                 if (is_numeric($id) && $id >= 0) {
                     $manga = $this->model->get($id);
         
