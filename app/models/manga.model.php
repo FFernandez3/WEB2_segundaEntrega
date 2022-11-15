@@ -142,14 +142,14 @@ class MangaModel
         $mangas = $query->fetchAll(PDO::FETCH_OBJ);
         return $mangas;
     }
-    //TRAE LA CANTIDAD DE REGISTROS DE LA TABLA
-    function getRegistersQuantity()
-    {
-        $query = $this->db->prepare("SELECT count(*) FROM manga");
-        $query->execute();
-        $quantity = $query->fetch(PDO::FETCH_OBJ);
-        return $quantity;
-    }
+    // //TRAE LA CANTIDAD DE REGISTROS DE LA TABLA
+    // function getRegistersQuantity()
+    // {
+    //     $query = $this->db->prepare("SELECT count(*) FROM manga");
+    //     $query->execute();
+    //     $quantity = $query->fetch(PDO::FETCH_OBJ);
+    //     return $quantity;
+    // }
     //TRAE TODA LA DESCRIPCION DE LA TABLA
     function getAllFieldsOfTable()
     {  

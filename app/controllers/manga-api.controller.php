@@ -8,12 +8,14 @@ class MangaApiController
     private $view;
     private $model;
     private $data;
+    private $helper;
 
 
     function __construct()
     {
         $this->model = new MangaModel();
         $this->view = new ApiView();
+        $this->helper= new AuthApiHelper();
         //obtengo los datos del get/post del body del request
         $this->data = file_get_contents("php://input");
     }
@@ -32,6 +34,9 @@ class MangaApiController
             $search = $_GET['search'] ?? null;
             $sort = $_GET['sort'] ?? null;
 
+            //$sort=strtolower($sort);
+
+    
             foreach ($input as $key => $value) {
                 if ($key != 'page' && $key != 'sort' && $key != 'search' && $key != 'resource') {
                     //var_dump($key);
@@ -100,8 +105,8 @@ class MangaApiController
     }
     //Ordenado, paginado y filtrado
     function getMangasOrderedPaginatedAndFiltered($sort, $page, $search)
-    {
-        if ($this->isAFieldOfTable($sort) && (is_numeric($page) && $page > 0) && ($search != null)) {
+    {   
+        if ($this->isAFieldOfTable($sort) && $sort!=null && (is_numeric($page) && $page > 0)&& $page!=null && ($search != null)) {
             $mangas = $this->model->getOrderedPaginatedAndFiltered($sort, $search, $page);
             if ($mangas) {
                 $this->view->response($mangas);
@@ -157,7 +162,8 @@ class MangaApiController
     }
     //ordenado segun sort
     function getMangasOrdered($sort = null)
-    {
+    {   
+        
         if ($this->isAFieldOfTable($sort) && $sort != null) {
             $mangas = $this->model->getAllBySort($sort);
             if ($mangas) {
@@ -173,17 +179,14 @@ class MangaApiController
     function getMangasPaginated($page = null)
     {
         if (is_numeric($page) && $page > 0 && $page != null) {
-            $quantity = $this->getQuantity();
-            $limit = 2;
-            //var_dump($quantity);
-            if (($quantity / $limit >= $page) && ($quantity > 0)) {
+            
                 $mangas = $this->model->pagination($page);
                 if ($mangas) {
                     $this->view->response($mangas);
                 } else {
                     $this->view->response("No hay mangas en esta pagina", 404);
                 }
-            }
+           
         } else {
             $this->showErrorParam();
         }
@@ -204,13 +207,6 @@ class MangaApiController
     }
 
 
-    function getQuantity()
-    {
-        $quantity = $this->model->getRegistersQuantity(); //esto me trae un obj, no el int con la cantidad
-        foreach ($quantity as $q) { //por eso hago este foreach y devuelvo el int
-            return $q;
-        }
-    }
     
     // controla lo que se ingresa en el sort
     function isAFieldOfTable($sort)
@@ -257,66 +253,85 @@ class MangaApiController
 
     public function deleteManga($params = null)
     { var_dump("entra al delete");
-        if ($params!=null) {
-            $id = $params[':ID'];
-            if(is_numeric($id)&&$id>0){
-                $manga = $this->model->get($id);
-                if ($manga) {
-                    $this->model->deleteById($id);
-                    $this->view->response($manga); //respondo con el manga eliminado x si despues necesito hacer algo con el
-                } else
-                    $this->view->response("El manga con el id=$id no existe", 404);
+        if($this->helper->isLoggedIn()){
+            if ($params!=null) {
+                $id = $params[':ID'];
+                if(is_numeric($id)&&$id>0){
+                    $manga = $this->model->get($id);
+                    if ($manga) {
+                        $this->model->deleteById($id);
+                        $this->view->response($manga); //respondo con el manga eliminado x si despues necesito hacer algo con el
+                    } else
+                        $this->view->response("El manga con el id=$id no existe", 404);
 
-            }
-            else{
-                $this->view->response("El valor del id  ingresado $id no es correcto, por favor ingrese un numero mayor a 0", 400);
-            }
-           
-        } 
+                }
+                else{
+                    $this->view->response("El valor del id  ingresado $id no es correcto, por favor ingrese un numero mayor a 0", 400);
+                }
+            
+            } 
+        }
+        else{
+            $this->view->response("No esta autorizado", 401);
+        }
+
       
     }
 
     public function insertManga()
     {
-        $manga = $this->getData();
+        if($this->helper->isLoggedIn()){
+            $manga = $this->getData();
 
-        if (empty($manga->titulo) || empty($manga->autor) || empty($manga->sinopsis) || empty($manga->editorial) || empty($manga->id_genero_fk)) {
-            $this->view->response("Complete los datos", 400);
-        } else {
-            $id = $this->model->insert($manga->titulo, $manga->autor, $manga->sinopsis, $manga->editorial, $manga->portada, $manga->id_genero_fk);
-            if ($id != 0) {
-                $manga = $this->model->get($id);
-                $this->view->response($manga, 201);
+            if (empty($manga->titulo) || empty($manga->autor) || empty($manga->sinopsis) || empty($manga->editorial) || empty($manga->id_genero_fk)) {
+                $this->view->response("Complete los datos", 400);
             } else {
-                $this->view->response("El manga no se pudo insertar", 400);
+                $id = $this->model->insert($manga->titulo, $manga->autor, $manga->sinopsis, $manga->editorial, $manga->portada, $manga->id_genero_fk);
+                if ($id != 0) {
+                    $manga = $this->model->get($id);
+                    $this->view->response($manga, 201);
+                } else {
+                    $this->view->response("El manga no se pudo insertar", 400);
+                }
             }
         }
+        else{
+            $this->view->response("No esta autorizado", 401);
+        }
+       
+
     }
 
     public function editManga($params = null)
     {
+        if($this->helper->isLoggedIn()){
+            $body = $this->getData(); //el body con lo q quiero cambiar
         
-        $body = $this->getData(); //el body con lo q quiero cambiar
+            //var_dump("entro al edit");
+            if($params!=null){
+                $id = $params[':ID'];
+                
+                if (is_numeric($id) && $id >= 0) {
+                    $manga = $this->model->get($id);
         
-        
-        if($params!=null){
-            $id = $params[':ID'];
-            
-            if (is_numeric($id) && $id >= 0) {
-                $manga = $this->model->get($id);
-    
-                if ($manga) {
-                    $this->model->edit($body->titulo, $body->autor, $body->sinopsis, $body->editorial, $body->portada, $body->id_genero_fk, $id);
-                    $this->view->response("La tarea se modifico con exito", 201);
-                } else {
-                    $this->view->response("La tarea con el id=$id no existe", 404);
+                    if ($manga) {
+                        $this->model->edit($body->titulo, $body->autor, $body->sinopsis, $body->editorial, $body->portada, $body->id_genero_fk, $id);
+                        $this->view->response("La tarea se modifico con exito", 201);
+                    } else {
+                        $this->view->response("La tarea con el id=$id no existe", 404);
+                    }
                 }
-            }
-            else{
-                $this->view->response("El valor del id  ingresado $id no es correcto, por favor ingrese un numero mayor a 0", 400);
+                else{
+                    $this->view->response("El valor del id  ingresado $id no es correcto, por favor ingrese un numero mayor a 0", 400);
+                }
+    
             }
 
+       }
+       else{
+            $this->view->response("No esta autorizado", 401);
         }
+       
        
     }
     //FUNCIONES DE ERROR

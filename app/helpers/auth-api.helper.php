@@ -8,6 +8,9 @@ class AuthApiHelper {
             return array();
         }
         $token = explode(".", $auth[1]);
+        if(count($token)!=3){ //por si borro un punto del token 
+            return array();
+        }
         $header = $token[0];
         $payload = $token[1];
         $signature = $token[2];

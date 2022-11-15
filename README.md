@@ -3,6 +3,13 @@
 Importar desde phpMyAdmin u otro database/db_mangas.sql
 ## Prueba con Postman o similar
 El endpoint de la API es: http://localhost/tpe_2daEntrega_version3/api/mangas 
+## Autenticación
+Para poder insertar, modificar o eliminar mangas es necesario loggearse correctamente y obtener un token.   
+**Method:**  GET    
+**URL:**  api/auth/token  
+**Datos para el login:** email: admin@admin.com, contraseña: 12345     
+**Response:**  200    
+
 ## Obtener todos los mangas
 **Method:**  GET  
 **URL:**  api/mangas    
@@ -86,7 +93,11 @@ Esta funcionalidad permite ordenar los recursos según cualquier campo de la tab
 **Method:** GET  
 **Url:** api/mangas?sort=&page=1  
 **Response:** 400  
-**Mensaje de error:** Alguno de los parametros es erroneo o esta vacio.
+- Recurso erróneo 
+**Method:** GET  
+**Url:** api/mang 
+**Response:** 400  
+**Mensaje de error:** Page not found. 
 ## CODIGOS DE RESPUESTA HTTP
 ### 200 OK
 Se da cuando una solicitud realizada por el usuario tuvo éxito.   
