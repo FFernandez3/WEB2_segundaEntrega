@@ -93,21 +93,18 @@ Esta funcionalidad permite ordenar los recursos según cualquier campo de la tab
 **Method:** GET  
 **Url:** api/mangas?sort=&page=1  
 **Response:** 400  
-- Recurso erróneo 
+- Recurso erróneo   
 **Method:** GET  
 **Url:** api/mang 
 **Response:** 400  
-**Mensaje de error:** Page not found.
--Autenticación fallida: email o contraseña incorrectos
-**Method:** GET  
-**Url:** api/auth/token 
-**Response:** 400
--Autenticación: token erroneo o vencido
-**Method:** GET  
-**Url:** api/auth/token 
-**Response:** 401
+**Mensaje de error:** Page not found.  
+- Autenticación fallida   
+**Method:** GET    
+**Url:** api/auth/token   
+**Response:** 401  
+**Mensaje de error:** No autorizado.
 
-
+  
 ## CODIGOS DE RESPUESTA HTTP
 ### 200 OK
 Se da cuando una solicitud realizada por el usuario tuvo éxito.   
