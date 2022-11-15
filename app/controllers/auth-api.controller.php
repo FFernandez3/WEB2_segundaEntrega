@@ -59,9 +59,9 @@ class AuthApiController {
         //var_dump(password_verify($pass, $userDB->password));
 
         //esto lo deberia obtener de la tabla usuarios no hardcodeado!!!
-        if ($userDB && password_verify($pass, $userDB->password)){
+        if ($userDB && password_verify($pass, $userDB->password)&& ($userMail == $userDB->email)){
             
-            if($userMail == $userDB->email){
+           // if($userMail == $userDB->email){
                 //  crear un token
                 $header = array(
                     'alg' => 'HS256',
@@ -79,12 +79,12 @@ class AuthApiController {
                 $signature = base64url_encode($signature);
                 $token = "$header.$payload.$signature";
                 $this->view->response($token); //si el user y la contraseña estan bien devuelve el token
-            }else{
-                $this->view->response('No autorizado', 401);
-            }
+            // }else{
+            //     $this->view->response('No autorizado', 401);
+            // }
         }
         else{
-            $this->view->response('El usuario o la contraseña son incorrectos', 400);
+            $this->view->response('No autorizado', 401);
         }
     }
 
