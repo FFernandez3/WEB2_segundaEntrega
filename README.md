@@ -7,7 +7,7 @@ El endpoint de la API es: http://localhost/tpe_2daEntrega_version3/api/mangas
 Para poder insertar, modificar o eliminar mangas es necesario loggearse correctamente y obtener un token.   
 **Method:**  GET    
 **URL:**  api/auth/token  
-**Datos para el login:** email: admin@admin.com, contraseña: 12345     
+**Datos para el login:** email: admin@admin.com  contraseña: 12345     
 **Response:**  200    
 
 ## Obtener todos los mangas
@@ -97,14 +97,26 @@ Esta funcionalidad permite ordenar los recursos según cualquier campo de la tab
 **Method:** GET  
 **Url:** api/mang 
 **Response:** 400  
-**Mensaje de error:** Page not found. 
+**Mensaje de error:** Page not found.
+-Autenticación fallida: email o contraseña incorrectos
+**Method:** GET  
+**Url:** api/auth/token 
+**Response:** 400
+-Autenticación: token erroneo o vencido
+**Method:** GET  
+**Url:** api/auth/token 
+**Response:** 401
+
+
 ## CODIGOS DE RESPUESTA HTTP
 ### 200 OK
 Se da cuando una solicitud realizada por el usuario tuvo éxito.   
 ### 201 CREATED
 Es la respuesta cuando se ha modificado o creado un recurso exitosamente.   
 ### 400 BAD REQUEST
-Indica que el servidor no puede o no procesara la petición debido a que algo es percibido como un error del cliente.   
+Indica que el servidor no puede o no procesara la petición debido a que algo es percibido como un error del cliente. 
+### 401 UNAUTHORIZED
+Indica que la petición no ha sido ejecutada porque carece de credenciales válidas de autenticación para el recurso solicitado. Se puede resolver con una re-autenticación. 
 ### 404 NOT FOUND 
 Indica que una página buscada no puede ser encontrada aunque la petición este correctamente hecha.  
 ### 500 INTERNAL SERVER ERROR
