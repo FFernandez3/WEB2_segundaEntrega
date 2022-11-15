@@ -59,7 +59,7 @@ Esta funcionalidad permite obtener todos los recursos ordenados ascendentemente 
 **Url:**  api/mangas?sort=autor  
 **Response:** 200  
 ## Paginar todos los mangas
-Esta funcionalidad permite  mostrar dos  mangas por página.   
+Esta funcionalidad permite  mostrar cuatro  mangas por página.   
 **Method:** GET  
 **Url:** api/mangas?page=1  
 **Response:** 200  

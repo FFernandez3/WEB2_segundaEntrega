@@ -282,10 +282,15 @@ class MangaApiController
     {
         if($this->helper->isLoggedIn()){
             $manga = $this->getData();
+            $generos=array(1, 20);
 
             if (empty($manga->titulo) || empty($manga->autor) || empty($manga->sinopsis) || empty($manga->editorial) || empty($manga->id_genero_fk)) {
                 $this->view->response("Complete los datos", 400);
-            } else {
+            }
+            else if(!in_array($manga->id_genero_fk, $generos)){
+                $this->view->response("El id del genero ingresado es incorrecto agregue $generos[0] o $generos[1]", 404);
+            }
+            else {
                 $id = $this->model->insert($manga->titulo, $manga->autor, $manga->sinopsis, $manga->editorial, $manga->portada, $manga->id_genero_fk);
                 if ($id != 0) {
                     $manga = $this->model->get($id);

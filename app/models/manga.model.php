@@ -78,7 +78,7 @@ class MangaModel
     //PAGINADO, FILTRADO Y ORDENADO
     function getOrderedPaginatedAndFiltered($sort, $search, $page)
     {
-        $limit = 2;
+        $limit = 4;
         $offset = $page * $limit - $limit;
         $query = $this->db->prepare("SELECT * FROM manga  WHERE titulo LIKE ? ORDER BY $sort LIMIT $limit OFFSET $offset");
         $query->execute(["%$search%"]);
@@ -88,7 +88,7 @@ class MangaModel
     //FILTRADO Y PAGINADO
     function getByTitlePaginated($search, $page)
     {
-        $limit = 2;
+        $limit = 4;
         $offset = $page * $limit - $limit;
         $query = $this->db->prepare("SELECT * FROM manga WHERE titulo LIKE ? LIMIT $limit OFFSET $offset");
         $query->execute(["%$search%"]);
@@ -99,7 +99,7 @@ class MangaModel
     //PAGINADO Y ORDENADO
     function getOrderedAndPaginated($sort, $page)
     {
-        $limit = 2;
+        $limit = 4;
         $offset = $page * $limit - $limit;
         $query = $this->db->prepare("SELECT * FROM manga ORDER BY $sort LIMIT $limit OFFSET $offset ");
         $query->execute();
@@ -135,7 +135,7 @@ class MangaModel
     //PAGINADO
     function pagination($page)
     {
-        $limit = 2;
+        $limit = 4;
         $offset = $page * $limit - $limit;
         $query = $this->db->prepare("SELECT * FROM manga LIMIT $limit OFFSET $offset");
         $query->execute();
